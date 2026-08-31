@@ -1,35 +1,22 @@
 # CapstoneLens
 
-CapstoneLens is a Laravel-based academic manuscript repository and capstone proposal evaluation prototype. It lets students submit a document, compare it with locally stored research papers, and review the strongest evidence for each similarity result.
+CapstoneLens is a Laravel prototype for reviewing capstone proposals against a local academic manuscript repository.
 
-## Features
+## What It Includes
 
-- Manuscript repository with local PDF import.
-- In-browser PDF reader rendered as page images with continuous scrolling.
-- Document upload progress before evaluation begins.
-- Local, CPU-friendly similarity analysis for PDF and DOCX submissions.
-- Evidence-based results that show matching passages, source pages, shared concepts, and overlap categories.
-- No login, registration, or role-based access control is included in this prototype.
-
-## Similarity Analysis
-
-The comparison pipeline runs completely on the local machine:
-
-1. `all-MiniLM-L6-v2` creates semantic embeddings and uses cosine similarity to retrieve candidate papers.
-2. `ms-marco-MiniLM-L-6-v2` reranks relevant passage pairs to reduce superficial matches.
-3. Results are labeled as strong topical overlap or methodological overlap, with no-meaningful-overlap results removed.
-
-The first run can take longer while models and repository embeddings are prepared. Later requests reuse the local corpus cache.
+- Local PDF manuscript repository and continuous-scroll reader.
+- PDF and DOCX proposal upload with progress feedback.
+- Local, CPU-friendly similarity analysis with supporting passage and page references.
+- Similarity categories for topical and methodological overlap.
 
 ## Requirements
 
-- PHP 8.3 or later
-- Composer
+- PHP 8.3 or later and Composer
 - Node.js and npm
-- Python 3.14 with the locally installed similarity dependencies
-- Poppler utilities (`pdftoppm` and `pdfinfo`) for PDF page rendering
+- Python 3.14
+- Poppler (`pdftoppm` and `pdfinfo`) for PDF rendering
 
-## Installation
+## Setup
 
 ```powershell
 composer install
@@ -38,31 +25,29 @@ php artisan key:generate
 php artisan migrate
 npm install
 npm run build
+python -m pip install -r requirements.txt
 ```
 
-Configure the local Python runtime in `.env` when it is not available through `python`:
+If `python` is not the correct runtime, set its path in `.env`:
 
 ```env
-SIMILARITY_PYTHON=C:/Python314/python.exe
-SIMILARITY_PYTHONPATH=C:/Users/YourName/AppData/Roaming/Python/Python314/site-packages
-SIMILARITY_RERANKER=cross-encoder/ms-marco-MiniLM-L-6-v2
-SIMILARITY_TIMEOUT=600
-SIMILARITY_REQUEST_TIMEOUT=600
+SIMILARITY_PYTHON=C:/Path/To/python.exe
+SIMILARITY_PYTHONPATH=C:/Path/To/Python/site-packages
 ```
 
-## Import Papers
+## Manuscript Archive
 
-Import PDFs from a folder into the local manuscript repository:
+The PDFs are not included in Git. Download and extract `CapstoneLens-manuscripts.zip` from the [shared Google Drive folder](https://drive.google.com/drive/folders/1sSFCDO9DTue0UmlgzjI9OPw6qBBJjekE).
+
+Import the extracted PDFs into your local repository:
 
 ```powershell
-php artisan manuscripts:import "C:\Users\Rig\Desktop\Thesis Dataset\computer\_science\_pdfs"
+php artisan manuscripts:import "C:\path\to\extracted-papers"
 ```
 
-Duplicate files are skipped using their checksum. Imported PDFs are stored outside the public web root.
+The import safely skips duplicate documents. Imported PDFs and generated similarity data stay in private local storage and are never committed.
 
-## Run Locally
-
-Start the local server with the project script:
+## Run
 
 ```powershell
 .\serve-local.ps1
@@ -70,20 +55,12 @@ Start the local server with the project script:
 
 Open [http://127.0.0.1:8080](http://127.0.0.1:8080).
 
-The script allows uploads up to 50 MB. Similarity evaluations have a 10-minute request allowance so the local model can finish processing the repository.
+The first similarity evaluation downloads the required local transformer models. Later evaluations reuse the local cache.
 
-## Testing
+## Verify
 
 ```powershell
 php artisan test --compact
 vendor\bin\pint --test --format agent
 npm run build
 ```
-
-## Project Structure
-
-- `app/Console/Commands/ImportManuscripts.php`: imports local repository PDFs.
-- `app/Services/SimilarityAnalyzer.php`: launches the local similarity pipeline.
-- `scripts/similarity.py`: embedding retrieval, reranking, and evidence extraction.
-- `app/Support/PdfPageRenderer.php`: renders protected PDF pages for the reader.
-- `resources/views/`: application screens based on the Stitch design.
