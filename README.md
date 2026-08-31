@@ -58,7 +58,7 @@ The import safely skips duplicate documents. Imported PDFs and generated similar
 ## Run
 
 ```powershell
-.\serve-local.ps1
+php artisan serve
 ```
 
 Open [http://127.0.0.1:8080](http://127.0.0.1:8080).
