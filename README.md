@@ -22,6 +22,7 @@ CapstoneLens is a Laravel prototype for reviewing capstone proposals against a l
 composer install
 Copy-Item .env.example .env
 php artisan key:generate
+New-Item -ItemType File -Path database/database.sqlite -Force
 php artisan migrate
 npm install
 npm run build
@@ -33,6 +34,13 @@ If `python` is not the correct runtime, set its path in `.env`:
 ```env
 SIMILARITY_PYTHON=C:/Path/To/python.exe
 SIMILARITY_PYTHONPATH=C:/Path/To/Python/site-packages
+```
+
+Install Poppler and add its `bin` folder to your system `PATH`. If it is not on `PATH`, configure the two executable paths in `.env`:
+
+```env
+PDFTOPPM_BINARY=C:/Path/To/pdftoppm.exe
+PDFINFO_BINARY=C:/Path/To/pdfinfo.exe
 ```
 
 ## Manuscript Archive
