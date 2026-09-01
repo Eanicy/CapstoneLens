@@ -2,6 +2,18 @@
 
 CapstoneLens is a Laravel prototype for reviewing capstone proposals against a local academic manuscript repository.
 
+## Required Capabilities
+
+| Requirement | Status |
+| --- | --- |
+| Capture a four-part project introduction: problem, existing solutions, gaps, and proposed solution; a 3-minute video pitch; supporting PDF/DOCX documents; and team skills. | Planned expansion of the current idea and document submission form. |
+| Use local LLM/RAG assessment against predefined criteria: novelty, substantive development beyond CRUD, expected duration, and team capacity. | Planned. |
+| Compute an acceptability score and recommend refinements when it falls below the defined threshold. | Planned. |
+| Predict similarity from past manuscripts using capstone project features, show a similarity score, and provide a comparative matrix of related projects. | Partially implemented: local semantic retrieval, passage reranking, evidence excerpts, and overlap categories are available. The comparative matrix is planned. |
+| Accept a final manuscript into a searchable repository only after authorized personnel manually verify it and run a similarity check. | Planned. |
+| Provide a manuscript viewer that prevents native browser downloading, text highlighting, and copying. | Implemented for the in-app viewer. It renders PDF pages as images; external capture tools cannot be fully prevented. |
+| Manage access privileges for user accounts. | Planned; login, registration, and role-based access control are intentionally not included yet. |
+
 ## What It Includes
 
 - Local PDF manuscript repository and continuous-scroll reader.
